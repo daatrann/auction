@@ -1,15 +1,21 @@
-const mongoose = require("mongoose");
+// Assuming you have required mongoose
+const mongoose = require('mongoose');
 
-mongoose.connect(
-    // "mongodb://admin:admin@mongo:2461/utilities-db",
-    "mongodb://admin:admin@utilities-db:27017/utilities-db?directConnection=true&authSource=admin&replicaSet=replicaset&retryWrites=true",
+// Your MongoDB connection string
+const connectionString = 'mongodb+srv://admin:admin@cluster0.dr5fib0.mongodb.net/auction';
 
-    { useNewUrlParser: true },
-    (err) => {
-        if (!err) {
-            console.log("Connect DB successfully ");
-        } else {
-            console.log("MongoDB Can't Connection" + err);
-        }
-    }
-);
+// Connect to MongoDB
+mongoose.connect(connectionString);
+
+// Event handlers for successful connection and error
+mongoose.connection.on('connected', () => {
+  console.log('Connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('Error connecting to MongoDB: ' + err);
+});
+
+require("../user_components/models/user.model");
+require("../auction_component/models/bid.model");
+
