@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // Your MongoDB connection string
-const connectionString = 'mongodb+srv://admin:admin@cluster0.dr5fib0.mongodb.net/auction';
+const connectionString = 'mongodb://admin:admin@localhost:27017/auction';
 
 // Connect to MongoDB
 mongoose.connect(connectionString);
