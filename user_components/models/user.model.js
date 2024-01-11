@@ -19,6 +19,9 @@ const userSchema = mongoose.Schema({
     phone: {
         type: String,
     },
+    role: {
+        type: String,
+    },
 });
 
 module.exports = mongoose.model("user", userSchema);
