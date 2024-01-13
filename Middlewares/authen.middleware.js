@@ -13,7 +13,7 @@ exports.isAuth = async (req, res, next) => {
 
   const token = accessToken.split(' ')[1];
   try {
-    let verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    let verified = jwt.verify(token, process.env.JWT_SECRET);
     req.idUser = verified.payload.idUser;
     req.email = verified.payload.email;
     next();
