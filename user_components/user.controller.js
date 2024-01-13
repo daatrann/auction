@@ -49,9 +49,8 @@ const register = async (req, res) => {
 }
 
 const viewProfile = async (req, res) => {
-    const id = req.params.id
 
-    const status = await userService.viewProfile(id);
+    const status = await userService.viewProfile(req.idUser);
     if(!status){
         return res
         .status(200)
@@ -107,6 +106,23 @@ const userList = async (req, res) => {
         );
 }
 
+const support = async (req, res) => {
+    const message = req.body.message
+    const data = await userService.support(message);
+    if(!data){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.email_exist)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
 module.exports = {
-    loginUser, register,userUpdate,viewProfile,userList
+    loginUser, register,userUpdate,viewProfile,userList,support
 }

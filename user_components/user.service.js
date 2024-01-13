@@ -77,6 +77,15 @@ const userList = async () => {
     }
 }
 
+const support = async (message) => {
+    try {
+        const data = await User.find();
+        return data
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
-    loginUser, register, userUpdate, viewProfile,userList
+    loginUser, register, userUpdate, viewProfile,userList,support
 }

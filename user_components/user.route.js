@@ -1,11 +1,13 @@
 const expess = require('express');
 const router = expess.Router();
 const userController = require('./user.controller');
+const authenMiddleware = require('../Middlewares/authen.middleware');
 
 router.post('/login', userController.loginUser)
 router.post('/signup', userController.register)
-router.get('/:id', userController.viewProfile)
-router.post('/:id/update', userController.userUpdate)
+router.get('/:id',authenMiddleware, userController.viewProfile)
+router.post('/:id/update',authenMiddleware, userController.userUpdate)
+router.post('/support', userController.support)
 
 //admin
 router.get('/', userController.userList)
