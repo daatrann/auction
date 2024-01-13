@@ -23,9 +23,9 @@ app.use(
 app.use('/user', userRoute)
 app.use('/auction', bidRoute)
 
-app.listen(3000, () => {
+app.listen(8000, () => {
     try {
-        console.log(`Server is running at port ${3000}.`);
+        console.log(`Server is running at port ${8000}.`);
     } catch (err) {
         console.log("Error in server setup. ", err);
     }
