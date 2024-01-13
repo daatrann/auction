@@ -5,8 +5,8 @@ const authenMiddleware = require('../Middlewares/authen.middleware');
 
 router.post('/login', userController.loginUser)
 router.post('/signup', userController.register)
-router.get('/:id',authenMiddleware, userController.viewProfile)
-router.post('/:id/update',authenMiddleware, userController.userUpdate)
+router.get('/profile',authenMiddleware.isAuth, userController.viewProfile)
+router.post('/:id/update',authenMiddleware.isAuth, userController.userUpdate)
 router.post('/support', userController.support)
 
 //admin
