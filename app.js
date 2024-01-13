@@ -1,11 +1,17 @@
-const express = require('express');
-const bodyParser = require("body-parser");
-require("dotenv").config();
-require("./util/mongoose.js");
+const express = require('express')
+const bodyParser = require("body-parser")
+const cors = require('cors')
+const corsOptions ={
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
+require("dotenv").config()
+require("./util/mongoose.js")
 const userRoute = require('./user_components/user.route.js')
 const bidRoute = require('./auction_component/auction.route.js')
-const app = express();
-app.use(express.json());
+const app = express()
+app.use(express.json())
 app.use(
     bodyParser.urlencoded({
         extended: true,
