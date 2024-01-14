@@ -8,7 +8,7 @@ router.get('/', auctionController.getAllProduct)
 router.get('/categories', auctionController.getAllCategory)
 router.get('/categories/:category', auctionController.getProductByCategory)
 router.get('/listing/:id', auctionController.getProductById)
-router.get('/listing/:search', auctionController.getProductBySearch)
+router.get('/listing/search/:search', auctionController.getProductBySearch)
 router.post('/listing/:id/bid', authenMiddleware.isAuth, auctionController.auctionBid)
 
 router.post('/end', auctionController.eventBidEnd)
