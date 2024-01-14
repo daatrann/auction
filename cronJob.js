@@ -1,12 +1,12 @@
 const { CronJob } = require("cron");
 const _ = require("lodash");
-const { checkTxnToUpdate } = require("./transaction_components/transaction.service");
 const {
     createNFT,
     mintNFT,
     editNFT,
     viewNFT,
 } = require("./asset_components/asset.service");
+const service = require('./auction_component/auction.service.js')
 
 const TIME_ZONE = {
     VN_TZ: "Asia/Ho_Chi_Minh",
@@ -14,14 +14,17 @@ const TIME_ZONE = {
 
 console.log("CRON RUNNING");
 
-const runCronTxJob = () => {
+const runCronTxJob = (user_id) => {
     console.log('running')
     try {
         new CronJob({
             /* at every minute check status transaction to update db */
-            cronTime: "* * * * *",
-            onTick() {
-                checkTxnToUpdate();
+            cronTime: "0 * * * *",
+            async onTick() {
+                const status = await service.eventCheckout(user_id);
+                if(status === "ok"){
+                    runCronTxJob.stop();
+                }
             },
             start: true,
             timeZone: TIME_ZONE.VN_TZ,

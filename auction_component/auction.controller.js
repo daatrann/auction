@@ -108,7 +108,7 @@ const listingAuction = async(req, res)=>{
 }
 
 const eventBidEnd = async(req, res)=>{
-    const bid_id = req.body.bidId
+    const bid_id = req.body.bidID
 
     await userService.eventBidEnd(bid_id);
     

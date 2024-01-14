@@ -1,6 +1,8 @@
 const Auction = require('./models/bid.model')
 const Cart = require('./models/cart.model')
+const User = require('../user_components/models/user.model')
 const jwt = require('jsonwebtoken')
+const { runCronTxJob } = require('../cronJob');
 require("dotenv").config;
 
 const getAllProduct = async () => {
@@ -59,7 +61,7 @@ const auctionBid = async (id, idUser, amount) => {
             );
             console.log('Updated existing ownership data.');
             flag = true;
-            break; 
+            break;
         }
     }
 
@@ -96,37 +98,48 @@ const listingAuction = async (product) => {
 }
 
 const eventBidEnd = async (id) => {
+    const currentTime = new Date();
     try {
         const bid = await getProductById(id)
-        for (let index = 0; index < bid.top_ownerships.length; index++) {
-            const cart = new Cart({
-                bid_id: bid._id,
-                user_id: bid.top_ownerships[index].user_id
-            })
-            await cart.save(cart)
-        }
+        const cart = new Cart({
+            bid_id: bid._id,
+            user_id: bid.top_ownerships[0].user_id,
+            status : "unpaid",
+            created_at: currentTime+""
+        })
+        await cart.save(cart)
+        runCronTxJob(bid.top_ownerships[0].user_id)
     } catch (error) {
-
     }
 }
 
-const eventCheckout = async (id) => {
+const eventCheckout = async (user_id) => {
     try {
-        const bid = await getProductById(id)
-        for (let index = 0; index < bid.top_ownerships.length; index++) {
-            const cart = new Cart({
-                bid_id: bid._id,
-                user_id: bid.top_ownerships[index].user_id
-            })
-            await cart.save(cart)
+        const carts = await Cart.find({ user_id: user_id, status: "unpaid" }).exec()
+
+        for (let index = 0; index < carts.length; index++) {
+            const cart = carts[index]
+            const currentTime = new Date()
+            const cartCreationTime = new Date(cart.created_at)
+
+            const timeDifferenceInHours = Math.abs(currentTime - cartCreationTime) / 36e5
+            if (timeDifferenceInHours >= 24) {
+                await Cart.findOneAndDelete({ _id: cart._id })
+                await User.updateOne({
+                    _id : user_id
+                },{
+                    stauts : "false"
+                })
+                return "ok"
+            }
         }
     } catch (error) {
-
+        console.error('Error in eventCheckout:', error)
     }
-}
+};
 
 
 
 module.exports = {
-    getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction, eventBidEnd,getProductBySearch,getAllCategory
+    getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction, eventBidEnd, getProductBySearch, getAllCategory,eventCheckout
 }

@@ -10,6 +10,9 @@ const cartSchema = mongoose.Schema({
     price: {
         type: String,
     },
+    created_at: {
+        type: String,
+    },
     status: {
         type: String,
     },

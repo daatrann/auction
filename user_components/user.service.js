@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 require("dotenv").config;
 
 const loginUser = async (userName, password) => {
-    const user = await User.findOne({ user_name: userName, password: password });
+    const user = await User.findOne({ user_name: userName, password: password, status: "true" });
     if (user !== null) {
         const payload = {
             idUser: user._id,
@@ -32,7 +32,8 @@ const register = async (userName, password, full_name, email, identity, phone) =
                 password: password,
                 email: email,
                 identity: identity,
-                phone: phone
+                phone: phone,
+                status: "true"
             })
             await user.save(user);
             return true
