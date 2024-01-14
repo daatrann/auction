@@ -23,7 +23,7 @@ const getAllProduct = async (req, res) => {
 }
 
 const getAllCategory = async (req, res) => {
-    const data = await userService.getAllProduct();
+    const data = await userService.getAllCategory();
     if (!data) {
         return res
             .status(200)
@@ -52,7 +52,7 @@ const getProductByCategory = async (req, res) => {
 const getProductBySearch = async (req, res) => {
     const search = req.params.search
 
-    const data = await userService.getProductByCategory(search);
+    const data = await userService.getProductBySearch(search);
     return res
         .status(200)
         .json(

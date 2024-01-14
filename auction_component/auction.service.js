@@ -15,12 +15,13 @@ const getAllCategory = async () => {
     return listCategory
 }
 
-const getProductByCategory = async (search) => {
-    const data = await Auction.find({ name: search })
+const getProductBySearch = async (search) => {
+    console.log(search);
+    const data = await Auction.find({ name: { $regex: search, $options: 'i' } });
     return data
 }
 
-const getProductBySearch = async (category) => {
+const getProductByCategory = async (category) => {
     const data = await Auction.find({ status: "listing", category: category })
     return data
 }
