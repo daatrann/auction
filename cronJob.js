@@ -1,18 +1,10 @@
 const { CronJob } = require("cron");
 const _ = require("lodash");
-const {
-    createNFT,
-    mintNFT,
-    editNFT,
-    viewNFT,
-} = require("./asset_components/asset.service");
 const service = require('./auction_component/auction.service.js')
 
 const TIME_ZONE = {
     VN_TZ: "Asia/Ho_Chi_Minh",
 };
-
-console.log("CRON RUNNING");
 
 const runCronTxJob = (user_id) => {
     console.log('running')
