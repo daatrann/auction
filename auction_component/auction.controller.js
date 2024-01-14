@@ -22,10 +22,37 @@ const getAllProduct = async (req, res) => {
         );
 }
 
+const getAllCategory = async (req, res) => {
+    const data = await userService.getAllProduct();
+    if (!data) {
+        return res
+            .status(200)
+            .json(
+                response(responseStatus.success, transValidation.not_found)
+            );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
 const getProductByCategory = async (req, res) => {
     const category = req.params.category
 
     const data = await userService.getProductByCategory(category);
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
+const getProductBySearch = async (req, res) => {
+    const search = req.params.search
+
+    const data = await userService.getProductByCategory(search);
     return res
         .status(200)
         .json(
@@ -46,9 +73,8 @@ const getProductById = async (req, res) => {
 
 const auctionBid = async(req, res)=>{
     const id = req.params.id
-    const name = req.body.name
     const amount = req.body.amount
-    await userService.auctionBid(id,name,amount);
+    await userService.auctionBid(id,req.idUser,amount);
     return res
         .status(200)
         .json(
@@ -81,6 +107,18 @@ const listingAuction = async(req, res)=>{
         );
 }
 
+const eventBidEnd = async(req, res)=>{
+    const bid_id = req.body.bidId
+
+    await userService.eventBidEnd(bid_id);
+    
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct)
+        );
+}
+
 module.exports = {
-    getAllProduct, getProductByCategory,getProductById,auctionBid,listingAuction
+    getAllProduct, getProductByCategory,getProductById,auctionBid,listingAuction,eventBidEnd,getProductBySearch,getAllCategory
 }

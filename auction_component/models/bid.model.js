@@ -26,7 +26,7 @@ const bidSchema = mongoose.Schema({
     },
     top_ownerships: [
         {
-            name: {
+            user_id: {
                 type: String,
             },
             amount: {

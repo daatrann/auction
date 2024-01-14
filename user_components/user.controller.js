@@ -107,8 +107,34 @@ const userList = async (req, res) => {
 }
 
 const support = async (req, res) => {
+    const accessToken = req.headers['authorization'];
+    let idUser;
+    if(!accessToken){
+        idUser = "Guest"
+    }else{
+        const token = accessToken.split(' ')[1];
+        let verified = jwt.verify(token, process.env.JWT_SECRET);
+        idUser = verified.payload.idUser;
+    }
     const message = req.body.message
-    const data = await userService.support(message);
+    const status = await userService.support(message,idUser);
+    if(!status){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.email_exist)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, status)
+        );
+}
+
+const supporter = async (req, res) => {
+    const message = req.body.message
+    const data = await userService.supporter();
     if(!data){
         return res
         .status(200)
@@ -124,5 +150,5 @@ const support = async (req, res) => {
 }
 
 module.exports = {
-    loginUser, register,userUpdate,viewProfile,userList,support
+    loginUser, register,userUpdate,viewProfile,userList,support,supporter
 }

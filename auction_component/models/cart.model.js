@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const supportSchema = mongoose.Schema({
-    sender: {
+const cartSchema = mongoose.Schema({
+    user_id: {
         type: String,
     },
-    recipient: {
+    bid_id: {
         type: String,
     },
-    content: {
+    price: {
         type: String,
     },
     status: {
@@ -15,4 +15,4 @@ const supportSchema = mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model("support", supportSchema);
+module.exports = mongoose.model("cart", cartSchema);

@@ -1,4 +1,5 @@
 const User = require('./models/user.model')
+const Support = require('./models/support.model')
 const jwt = require('jsonwebtoken')
 require("dotenv").config;
 
@@ -77,15 +78,31 @@ const userList = async () => {
     }
 }
 
-const support = async (message) => {
+const support = async (message, id) => {
     try {
-        const data = await User.find();
+        const support = new Support({
+            sender: id,
+            content: message,
+            status : "sent"
+        })
+        await support.save(support);
+        return true
+    } catch (error) {
+    }
+}
+
+const supporter = async () => {
+    try {
+        const support = await Support.find();
+        const data = []
+        support.forEach(element => {
+           
+        });
         return data
     } catch (error) {
-        console.log(error);
     }
 }
 
 module.exports = {
-    loginUser, register, userUpdate, viewProfile,userList,support
+    loginUser, register, userUpdate, viewProfile,userList,support,supporter
 }
