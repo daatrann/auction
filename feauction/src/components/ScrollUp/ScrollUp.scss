@@ -1,0 +1,41 @@
+
+@import "~@flaticon/flaticon-uicons/css/all/all";
+#scrollUp {
+    
+    position: fixed !important;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(34, 47, 67);
+    color: #fff;
+    right: 40px;
+    bottom: 40px;
+    border-radius: 100%;
+    text-align: center;
+    overflow: hidden;
+    z-index: 999!important;
+    border: 0;
+    transition-duration: .2s;
+
+    display: flex !important;
+    align-items: center ;
+    justify-content: center ;
+
+    .fi-rr-arrow-small-up {
+        padding-top: 5px;
+    }
+
+    &:hover {
+        transform: translateY(-3px)!important;
+        transition: all .3s ease 0s;
+    }
+}
+
+// Show Scroll
+.show-scroll {
+    // bottom: 3rem;
+    display: block;
+}
+
+
+
+

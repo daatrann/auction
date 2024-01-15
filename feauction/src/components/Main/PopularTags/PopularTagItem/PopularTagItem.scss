@@ -1,0 +1,77 @@
+
+
+.card-style-2 {
+    border-width: 1px;
+    border-style: solid;
+    padding: 19px;
+    position: relative;
+    display: flex;
+    border-radius: 16px;
+    align-items: center;
+    margin-bottom: 30px;
+
+    .card-image {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+        min-width: 32px;
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+    }
+}
+
+.hover-neon {
+    border: 1px solid #222f43;
+    background-color: #131c31;
+
+    &:hover {
+        background: linear-gradient(#131c31,#131c31) padding-box,linear-gradient(90deg,#0ea5ea,#0bd1d1) border-box;
+        border-radius: 16px;
+        border: 1px solid transparent;
+        box-shadow: 0 3px 20px rgb(11 209 209 / 20%);
+        transform: translateY(-2px);
+        cursor: pointer;
+    }
+}
+
+.hover-up, .hover-up:hover {
+    transition: all .25s cubic-bezier(.02,.01,.47,1);
+}
+.animate__fadeIn {
+    animation-name: fadeIn;
+}
+
+@media (max-width: 576px) {
+    .col-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+}
+
+@media (min-width: 1200px){
+    .col-xl-2 {
+        flex: 0 0 auto;
+        width: 16.6666666667%;
+    }
+}
+@media (min-width: 992px){
+    .col-lg-3 {
+        flex: 0 0 auto;
+        width: 25%;
+    }
+}
+@media (min-width: 768px){
+    .col-md-4 {
+        flex: 0 0 auto;
+        width: 33.3333333333%;
+    }
+}
+@media (min-width: 576px){
+    .col-sm-4 {
+        flex: 0 0 auto;
+        width: 33.3333333333%;
+    }
+}

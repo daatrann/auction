@@ -1,0 +1,12 @@
+export const tabWidth = 2;
+export const printWidth = 100;
+export const useTabs = false;
+export const semi = true;
+export const singleQuote = true;
+export const trailingComma = 'none';
+export const bracketSpacing = true;
+export const bracketSameLine = false;
+export const jsxSingleQuote = false;
+export const quoteProps = 'as-needed';
+export const arrowParens = 'avoid';
+export const insertPragma = false;

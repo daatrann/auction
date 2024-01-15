@@ -1,0 +1,43 @@
+.head-sidebar {
+    position: relative;
+
+     h6 {
+        .color-gray-700 {
+            color: #66768f;
+        }
+        
+        h6 {
+            font-size: 16px;
+            line-height: 22px;
+        }
+     }
+
+     .row {
+        --bs-gutter-x: 1.5rem;
+        --bs-gutter-y: 0;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: calc(var(--bs-gutter-y) * -1);
+        margin-right: calc(var(--bs-gutter-x)/ -2);
+        margin-left: calc(var(--bs-gutter-x)/ -2);
+    }
+}
+
+.content-sidebar {
+    .img-item {
+        padding: 0 12px;
+    }
+}
+
+
+.bdrd-8 {
+    border-radius: 8px;
+}
+.mb-10 {
+    margin-bottom: 10px!important;
+}
+
+.mt-30 {
+    margin-top: 30px!important;
+}
+

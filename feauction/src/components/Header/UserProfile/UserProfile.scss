@@ -1,0 +1,30 @@
+.user-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.menu > .menu-item > .profile-menu > .profile-item {
+    display: block;
+}
+.profile-item > a {
+    display: flex!important;
+    color: #94a9c9;
+    font-size: 13px;
+    line-height: 16px;
+    position: relative;
+    color: #94a9c9;
+    transition: 0.2s;
+    text-transform: capitalize;
+    padding: 10px 22px 10px 38px;
+    background: none!important;
+}
+
+.material-symbols-outlined{
+  font-size: 18px;
+  color: #94A9C9;
+  left: 50px;
+}
+
+.menu-item-has-children .material-symbols-outlined{
+    padding: 10px 10px 20px 10px;
+}

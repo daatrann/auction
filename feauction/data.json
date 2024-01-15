@@ -1,0 +1,32 @@
+{
+    "noti":[
+        {
+            "id":1,
+            "type":"like",
+            "content":"A liked your post",
+            "time": "1 day ago",
+            "isread":false
+        },
+        {
+            "id":2,
+            "type":"like",
+            "content":"A liked your post",
+            "time": "1 day ago",
+            "isread":false
+        },
+        {
+            "id":3,
+            "type":"post",
+            "content":"You just posted successfully",
+            "time": "1 minutes ago",
+            "isread":false
+        },
+        {
+            "id":4,
+            "type":"like",
+            "content":"A liked your post",
+            "time": "1 day ago",
+            "isread":false
+        }
+    ]
+}

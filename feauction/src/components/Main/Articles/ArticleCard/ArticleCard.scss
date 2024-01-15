@@ -1,0 +1,222 @@
+.col-lg-4 {
+    h4 {
+        font-size: 17px;
+        height: 80px;
+        line-height: 1.4;
+    }
+    .author-ava {
+        img {
+            display: inline-block;
+            height: 24px!important;
+            width: 32px!important;
+            border-radius: 50%!important;
+        }
+    }
+    .author-info {
+        padding-left: 15px;
+        p {
+            margin: initial;
+        }
+    }
+
+}
+.col-lg-6 {
+    h4 {
+        height: 100px;
+    }
+    .author-info {
+        padding-left: 15px;
+        p {
+            margin: initial;
+        }
+    }
+}
+
+.card-blog-1 {
+    padding: 20px;
+    width: 100%;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border: 1px solid #222f43;
+    background-color: #131c31;
+    position: relative;
+    .card-image {
+        position: relative;
+        overflow: hidden; /* Clip any overflow */
+
+        img {
+            width: 100%; /* Let the image adjust its width based on the height constraint */
+            height: 100%; /* Constrain the height of the image to a maximum of 200 pixels */
+            object-fit: cover; /* Resize the image to cover the entire container */
+            object-position: center center; /* Position the image in the center of the container */
+            border-radius: 16px;
+        }
+    }
+
+    &:hover h4.color-white {
+        transition-duration: .5s;
+        color: #1cc2e7!important;
+    }
+}
+
+.articles-container .col-lg-6 img {
+    height: 285px;
+}
+.articles-container .col-lg-4 img {
+    height: 192px;
+}
+
+.hover-up, .hover-up:hover {
+    transition-duration: .2s;
+    transition: all .25s cubic-bezier(.02,.01,.47,1);
+}
+.sub-info {
+    display: flex;
+    justify-content: space-between;
+    a {
+        margin-right: 5px;
+    }
+}
+.timeread {
+    background: url(https://jthemes.net/themes/wp/genz/wp-content/themes/genz/assets/imgs/page/homepage1/clock.svg) no-repeat 0;
+    display: inline-block;
+    padding: 0 0 0 23px;
+}
+.card-info {
+    .box-author {
+        display: flex;
+        align-items: center;
+
+        .author-ava {
+
+            img {
+                display: inline-block;
+                height: 48px!important;
+                width: 48px!important;
+                border-radius: 50%!important;
+            }
+        }
+        
+    }
+}
+
+.mb-20 {
+    margin-bottom: 20px!important;
+}
+
+.dataDis {
+    .subDis {
+
+        .icon {
+            margin-left: 5px;
+            height: 15px;
+            width: 15px;
+            cursor: pointer;
+        }
+        .numberCount {
+            
+        }
+    }
+}
+
+.info-container{
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-left: calc(var(--bs-gutter-x)/ 2);
+    margin-top: var(--bs-gutter-y);
+}
+
+.readmore {
+    position: relative;
+    a {
+        z-index: 2;
+    }
+    &:hover {
+        transition-duration: .2s;
+    }
+}
+
+.card-blog-1 .card-info a:hover, .card-blog-1 .card-info a:hover h4, .card-blog-1 .card-info a:hover h5 {
+    color: #0ea5ea!important;
+}
+
+.author-name, .author-ava {
+    cursor: pointer;
+}
+
+
+
+///
+/// 
+
+h6 {
+    font-size: 16px;
+    line-height: 22px;
+}
+h5, h6 {
+    font-family: Noto Sans,sans-serif;
+    font-weight: 700;
+    color: #000;
+}
+
+.mt-25 {
+    margin-top: 25px!important;
+}
+.heading-4, h4 {
+    font-size: 24px;
+    line-height: 33px;
+}
+.color-gray-700 {
+    color: #66768f;
+}
+
+.text-sm, .text-sm-bold {
+    font-family: Noto Sans,sans-serif;
+    font-size: 14px!important;
+    line-height: 20px!important;
+}
+.text-sm {
+    font-weight: 400;
+}
+
+@media (min-width: 992px){
+    .col-7 {
+        flex: 0 0 auto;
+        width: 58.3333333333%;
+    }
+    .col-lg-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+    .col-lg-4 {
+        flex: 0 0 auto;
+        width: 33.3333333333%;
+
+        .dataDis {
+            display: none;
+        }
+        .card-info .col-7{
+            width: 100%;
+        }
+        
+    }
+}
+
+@media (max-width: 992px){
+    .col-lg-4 {
+        flex: 0 0 auto;
+        width: 33.3333333333%;
+
+        .dataDis {
+            display: block;
+        }
+        .card-info .col-7{
+            width: 58.3333333333%;
+        }
+    }
+}

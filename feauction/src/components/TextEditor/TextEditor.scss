@@ -1,0 +1,27 @@
+.jodit-status-bar, .jodit-toolbar-editor-collection, .jodit-toolbar-editor-collection{
+  background-color: #0f172a;
+  
+};
+.jodit-status-bar{
+color: #fff !important;
+}
+.jodit-container:not(.jodit_inline) .jodit-workplace {
+  background-color: #0f172a !important;
+}
+.jodit-ui-group .jodit-ui-group_size_middle .jodit-ui-group_line_true{
+&::after{
+  background-color: #222f43 !important ;
+}
+
+}
+.jodit-container{
+  p{
+      color: #fff !important;
+    }
+}
+.jodit-status-bar__item{
+height: 13px;
+a{
+  color:#fff;
+}
+}

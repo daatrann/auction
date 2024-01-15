@@ -1,0 +1,74 @@
+.card {
+    margin-right: 10px;
+    border-radius: 4px;
+    background-color: #ffff;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    .card-body {
+        padding: 15px 63px;
+        flex: 1 1 auto;
+        min-height: 1px;
+        .icon-big {
+            font-size: 3rem;
+            min-height: 64px;
+            font-weight: 700;
+        }
+
+        .numbers {
+            text-align: right;
+        }
+    }
+
+    .card-footer {
+        padding:15px 10px;
+        background-color: transparent;
+        line-height: 30px;
+        border-top: none !important;
+        font-size: 14px;
+        .stats{
+            margin-top:10px;
+            font-size: 15px;
+        }
+    }
+}
+
+.body_content {
+    display: flex;
+    margin-top:50px;
+.rechart_content {
+    margin-right: 20px;   
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    padding: 20px 20px;
+    h4 {
+        margin-bottom:10px;
+    }
+}
+    .pichart_content {
+       padding: 20px 20px;
+       border: 1px solid rgba(0, 0, 0, 0.125);
+       border-radius: 0.25rem;
+       h4 {
+        margin-bottom:10px;
+    }
+  
+    }
+    .card-footer {
+        padding:0 10px;
+        background-color: transparent;
+        line-height: 30px;
+        border-top: none !important;
+        font-size: 14px;
+        .stats{  margin-top:5px;
+            font-size: 15px;
+        }
+    }
+}
+

@@ -1,0 +1,21 @@
+
+
+.user-info {
+    display: flex;
+    padding: 40px 30px;
+    border-radius: 5px;
+    background-color: #0f172a;
+    width: 100%;
+    background: linear-gradient(#0f172a, #0f172a) padding-box, linear-gradient(90deg, #0ea5ea, #0bd1d1) border-box;
+    border-radius: 15px;
+    border: 1px solid transparent;
+
+    img {
+        width: 150px;
+        height: 150px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        margin-right: 20px;
+    }
+}
+
