@@ -3,6 +3,7 @@ const router = expess.Router();
 const auctionController = require('./auction.controller');
 const authenMiddleware = require('../Middlewares/authen.middleware');
 
+router.get("/get-upload-url/:filename", auctionController.getUploadURL)
 router.post('/listing',authenMiddleware.isAuth, auctionController.listingAuction)
 router.get('/', auctionController.getAllProduct)
 router.get('/categories', auctionController.getAllCategory)

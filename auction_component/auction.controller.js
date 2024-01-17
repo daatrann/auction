@@ -119,6 +119,33 @@ const eventBidEnd = async(req, res)=>{
         );
 }
 
+const getUploadURL = async (req, res) => {
+    const file = req.params
+    if (!file.filename) {
+        return res
+            .status(500)
+            .json(
+                response(
+                    responseStatus.fail,
+                    transValidation.bad_request,
+                    errorCode.bad_request
+                )
+            );
+    }
+    const uploadURL = await userService.getLinkImage(file.filename);
+
+    return res
+        .status(200)
+        .json(
+            response(
+                responseStatus.success,
+                transValidation.input_correct,
+                uploadURL
+            )
+        );
+};
+
 module.exports = {
-    getAllProduct, getProductByCategory,getProductById,auctionBid,listingAuction,eventBidEnd,getProductBySearch,getAllCategory
+    getAllProduct, getProductByCategory,getProductById,auctionBid,
+    listingAuction,eventBidEnd,getProductBySearch,getAllCategory,getUploadURL
 }

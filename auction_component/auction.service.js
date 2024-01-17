@@ -2,8 +2,24 @@ const Auction = require('./models/bid.model')
 const Cart = require('./models/cart.model')
 const User = require('../user_components/models/user.model')
 const jwt = require('jsonwebtoken')
+const aws = require("aws-sdk");
 const { runCronTxJob } = require('../cronJob');
 require("dotenv").config;
+
+aws.config.update({
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+});
+
+const getLinkImage = async (filename) => {
+    var s3 = new aws.S3();
+    var params = {
+        Bucket: "savvyfitness-dev",
+        Key: filename + Math.random(),
+        Expires: 60,
+    };
+    return s3.getSignedUrl("putObject", params);
+};
 
 const getAllProduct = async () => {
     const data = await Auction.find({ status: "listing" })
@@ -141,5 +157,6 @@ const eventCheckout = async (user_id) => {
 
 
 module.exports = {
-    getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction, eventBidEnd, getProductBySearch, getAllCategory,eventCheckout
+    getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction,
+     eventBidEnd, getProductBySearch, getAllCategory,eventCheckout,getLinkImage
 }
