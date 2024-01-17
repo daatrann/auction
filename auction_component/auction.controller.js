@@ -38,6 +38,23 @@ const getAllCategory = async (req, res) => {
         );
 }
 
+const getAuctionByStatus = async (req, res) => {
+    const status = req.params.status
+    const data = await userService.getProductByStatus(status);
+    if (!data) {
+        return res
+            .status(200)
+            .json(
+                response(responseStatus.success, transValidation.not_found)
+            );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
 const getProductByCategory = async (req, res) => {
     const category = req.params.category
 
@@ -147,5 +164,5 @@ const getUploadURL = async (req, res) => {
 
 module.exports = {
     getAllProduct, getProductByCategory,getProductById,auctionBid,
-    listingAuction,eventBidEnd,getProductBySearch,getAllCategory,getUploadURL
+    listingAuction,eventBidEnd,getProductBySearch,getAllCategory,getUploadURL,getAuctionByStatus
 }

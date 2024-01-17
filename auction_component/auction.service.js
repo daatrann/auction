@@ -22,7 +22,7 @@ const getLinkImage = async (filename) => {
 };
 
 const getAllProduct = async () => {
-    const data = await Auction.find({ status: "listing" })
+    const data = await Auction.find()
     return data
 }
 
@@ -40,7 +40,12 @@ const getProductBySearch = async (search) => {
 }
 
 const getProductByCategory = async (category) => {
-    const data = await Auction.find({ status: "listing", category: category })
+    const data = await Auction.find({category: category })
+    return data
+}
+
+const getProductByStatus = async (status) => {
+    const data = await Auction.find({ status: status})
     return data
 }
 
@@ -105,7 +110,7 @@ const listingAuction = async (product) => {
             time_remain: product.time_remain,
             description: product.description,
             image: product.image,
-            status: "listing"
+            status: "init"
         })
         await auction.save(auction)
     } catch (error) {
@@ -158,5 +163,6 @@ const eventCheckout = async (user_id) => {
 
 module.exports = {
     getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction,
-     eventBidEnd, getProductBySearch, getAllCategory,eventCheckout,getLinkImage
+     eventBidEnd, getProductBySearch, getAllCategory,eventCheckout,getLinkImage,
+     getProductByStatus
 }
