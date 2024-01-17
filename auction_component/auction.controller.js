@@ -96,13 +96,29 @@ const auctionBid = async(req, res)=>{
         return res
         .status(200)
         .json(
-            response(responseStatus.success, transValidation.input_correct)
+            response(responseStatus.fail, transValidation.bad_request)
         );
     }
     return res
         .status(200)
         .json(
-            response(responseStatus.fail, transValidation.bad_request, status)
+            response(responseStatus.success, transValidation.input_correct, status)
+        );
+}
+
+const viewCart = async(req, res)=>{
+    const status = await userService.viewCart(req.idUser);
+    if(!status){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.bad_request)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, status)
         );
 }
 
@@ -125,7 +141,7 @@ const listingAuction = async(req, res)=>{
 }
 
 const eventBidEnd = async(req, res)=>{
-    const bid_id = req.body.bidID
+    const bid_id = req.params.id
 
     await userService.eventBidEnd(bid_id);
     
@@ -165,4 +181,5 @@ const getUploadURL = async (req, res) => {
 module.exports = {
     getAllProduct, getProductByCategory,getProductById,auctionBid,
     listingAuction,eventBidEnd,getProductBySearch,getAllCategory,getUploadURL,getAuctionByStatus
+    ,viewCart
 }

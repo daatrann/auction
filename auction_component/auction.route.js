@@ -12,8 +12,9 @@ router.get('/category/:category', auctionController.getProductByCategory)
 router.get('/listing/:id', auctionController.getProductById)
 router.get('/listing/search/:search', auctionController.getProductBySearch)
 router.post('/listing/:id/bid', authenMiddleware.isAuth, auctionController.auctionBid)
+router.get('/:id/cart', authenMiddleware.isAuth, auctionController.viewCart)
 
-router.post('/end', auctionController.eventBidEnd)
+router.post('/:id/end', auctionController.eventBidEnd)
 
 
 module.exports = router

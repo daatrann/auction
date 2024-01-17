@@ -33,7 +33,7 @@ const register = async (userName, password, full_name, email, identity, phone) =
                 email: email,
                 identity: identity,
                 phone: phone,
-                status: "true"
+                status: "true",
             })
             await user.save(user);
             return true

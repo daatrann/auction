@@ -54,6 +54,11 @@ const getProductById = async (id) => {
     return data
 }
 
+const viewCart = async (id) => {
+    const data = await Cart.find({ user_id : id })
+    return data
+}
+
 const auctionBid = async (id, idUser, amount) => {
     try {
         const data = await Auction.findOne({ _id: id });
@@ -168,5 +173,5 @@ const eventCheckout = async (user_id) => {
 module.exports = {
     getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction,
     eventBidEnd, getProductBySearch, getAllCategory, eventCheckout, getLinkImage,
-    getProductByStatus
+    getProductByStatus,viewCart
 }
