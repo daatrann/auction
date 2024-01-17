@@ -56,7 +56,16 @@ const getProductById = async (id) => {
 
 const viewCart = async (id) => {
     const data = await Cart.find({ user_id : id })
-    return data
+    let cartData = []
+    for (let i = 0; i < data.length; i++) {
+        const bidData = await Auction.findOne({ _id: data[i].bid_id });
+        cartData.push({
+            cart: data[i],
+            productInfor : bidData
+        })
+        
+    }
+    return cartData
 }
 
 const auctionBid = async (id, idUser, amount) => {
