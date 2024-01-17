@@ -91,30 +91,30 @@ const getProductById = async (req, res) => {
 const auctionBid = async(req, res)=>{
     const id = req.params.id
     const amount = req.body.amount
-    await userService.auctionBid(id,req.idUser,amount);
-    return res
+    const status = await userService.auctionBid(id,req.idUser,amount);
+    if(!status){
+        return res
         .status(200)
         .json(
             response(responseStatus.success, transValidation.input_correct)
         );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.bad_request, status)
+        );
 }
 
 const listingAuction = async(req, res)=>{
-    const name = req.body.name
-    const quantity = req.body.quantity
-    const price = req.body.price
-    const category = req.body.category
-    const time_remain = req.body.time_remain
-    const description = req.body.description
-    const image = req.body.image
     const product = {
-        name : name,
-        quantity : quantity,
-        price : price,
-        category : category,
-        time_remain : time_remain,
-        description : description,
-        image : image
+        name : req.body.name,
+        quantity : req.body.quantity,
+        price : req.body.price,
+        category : req.body.category,
+        time_remain : req.body.time_remain,
+        description : req.body.description,
+        image : req.body.image
     }
     const status = userService.listingAuction(product);
     return res

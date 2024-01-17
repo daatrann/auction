@@ -40,12 +40,12 @@ const getProductBySearch = async (search) => {
 }
 
 const getProductByCategory = async (category) => {
-    const data = await Auction.find({category: category })
+    const data = await Auction.find({ category: category })
     return data
 }
 
 const getProductByStatus = async (status) => {
-    const data = await Auction.find({ status: status})
+    const data = await Auction.find({ status: status })
     return data
 }
 
@@ -55,47 +55,51 @@ const getProductById = async (id) => {
 }
 
 const auctionBid = async (id, idUser, amount) => {
-    const data = await Auction.findOne({ _id: id });
+    try {
+        const data = await Auction.findOne({ _id: id });
 
-    if (!data) {
-        return;
-    }
+        if (!data) {
+            return;
+        }
 
-    const topOwnerships = data.top_ownerships;
-    const OwnershipData = {
-        user_id: idUser,
-        amount: amount,
-    };
+        const topOwnerships = data.top_ownerships;
+        const OwnershipData = {
+            user_id: idUser,
+            amount: amount,
+        };
 
-    let flag = false;
+        let flag = false;
 
-    for (let i = 0; i < topOwnerships.length; i++) {
-        if (topOwnerships[i].user_id === idUser) {
+        for (let i = 0; i < topOwnerships.length; i++) {
+            if (topOwnerships[i].user_id === idUser) {
+                await Auction.updateOne(
+                    { _id: id, 'top_ownerships.user_id': idUser },
+                    {
+                        $set: {
+                            [`top_ownerships.${i}.user_id`]: OwnershipData.user_id,
+                            [`top_ownerships.${i}.amount`]: OwnershipData.amount,
+                        },
+                    }
+                );
+                console.log('Updated existing ownership data.');
+                flag = true;
+                break;
+            }
+        }
+
+        if (!flag) {
             await Auction.updateOne(
-                { _id: id, 'top_ownerships.user_id': idUser },
+                { _id: id },
                 {
-                    $set: {
-                        [`top_ownerships.${i}.user_id`]: OwnershipData.user_id,
-                        [`top_ownerships.${i}.amount`]: OwnershipData.amount,
+                    $push: {
+                        top_ownerships: OwnershipData,
                     },
                 }
             );
-            console.log('Updated existing ownership data.');
-            flag = true;
-            break;
+            console.log('Added new ownership data.');
         }
-    }
-
-    if (!flag) {
-        await Auction.updateOne(
-            { _id: id },
-            {
-                $push: {
-                    top_ownerships: OwnershipData,
-                },
-            }
-        );
-        console.log('Added new ownership data.');
+    } catch (error) {
+        return error
     }
 
 }
@@ -125,8 +129,8 @@ const eventBidEnd = async (id) => {
         const cart = new Cart({
             bid_id: bid._id,
             user_id: bid.top_ownerships[0].user_id,
-            status : "unpaid",
-            created_at: currentTime+""
+            status: "unpaid",
+            created_at: currentTime + ""
         })
         await cart.save(cart)
         runCronTxJob(bid.top_ownerships[0].user_id)
@@ -147,9 +151,9 @@ const eventCheckout = async (user_id) => {
             if (timeDifferenceInHours >= 24) {
                 await Cart.findOneAndDelete({ _id: cart._id })
                 await User.updateOne({
-                    _id : user_id
-                },{
-                    stauts : "false"
+                    _id: user_id
+                }, {
+                    stauts: "false"
                 })
                 return "ok"
             }
@@ -163,6 +167,6 @@ const eventCheckout = async (user_id) => {
 
 module.exports = {
     getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction,
-     eventBidEnd, getProductBySearch, getAllCategory,eventCheckout,getLinkImage,
-     getProductByStatus
+    eventBidEnd, getProductBySearch, getAllCategory, eventCheckout, getLinkImage,
+    getProductByStatus
 }
