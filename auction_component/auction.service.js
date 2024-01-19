@@ -28,23 +28,7 @@ function getPresignedUrl(key) {
 
 const getAllProduct = async () => {
     const auction = await Auction.find()
-    const data = []
-    auction.forEach(e => {
-        const arrayImage = []
-        e.image.forEach(element => {
-            const params = {
-                Bucket: bucketName,
-                Key: element
-              };
-            
-        });
-        
-        data.push({
-            product: e,
-            images : arrayImage
-        })
-    });
-    
+    return auction
 }
 
 const getAllCategory = async () => {
