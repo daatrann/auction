@@ -10,20 +10,41 @@ aws.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
 });
+const s3 = new aws.S3();
 
-const getLinkImage = async (filename) => {
-    var s3 = new aws.S3();
-    var params = {
-        Bucket: "savvyfitness-dev",
-        Key: filename + Math.random(),
-        Expires: 60,
-    };
-    return s3.getSignedUrl("putObject", params);
+const getLinkImage = async (files) => {
+    return files.map((key) => getPresignedUrl(key));
 };
 
+function getPresignedUrl(key) {
+    const params = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: key,
+    };
+  
+    return s3.getSignedUrl('getObject', params);
+  }
+
+
 const getAllProduct = async () => {
-    const data = await Auction.find()
-    return data
+    const auction = await Auction.find()
+    const data = []
+    auction.forEach(e => {
+        const arrayImage = []
+        e.image.forEach(element => {
+            const params = {
+                Bucket: bucketName,
+                Key: element
+              };
+            
+        });
+        
+        data.push({
+            product: e,
+            images : arrayImage
+        })
+    });
+    
 }
 
 const getAllCategory = async () => {
@@ -34,7 +55,6 @@ const getAllCategory = async () => {
 }
 
 const getProductBySearch = async (search) => {
-    console.log(search);
     const data = await Auction.find({ name: { $regex: search, $options: 'i' } });
     return data
 }
@@ -120,6 +140,20 @@ const auctionBid = async (id, idUser, amount) => {
 
 const listingAuction = async (product) => {
     try {
+        const keyImages = []
+        const uploadPromises = product.image.map( async (file) => {
+            const key = `${file.originalname}_${Date.now()}_${Math.random()}` 
+            const params = {
+                Bucket: process.env.BUCKET_NAME,
+                Key: key,
+                Body: file.buffer,
+                ContentType: file.mimetype
+            };
+            const result = await s3.upload(params).promise();
+            keyImages.push(key)
+            return result.Location;
+        })
+        const imageUrls = await Promise.all(uploadPromises);
         const auction = new Auction({
             name: product.name,
             quantity: product.quantity,
@@ -127,7 +161,7 @@ const listingAuction = async (product) => {
             category: product.category,
             time_remain: product.time_remain,
             description: product.description,
-            image: product.image,
+            image: keyImages,
             status: "init"
         })
         await auction.save(auction)

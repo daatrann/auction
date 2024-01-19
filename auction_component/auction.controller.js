@@ -88,16 +88,16 @@ const getProductById = async (req, res) => {
         );
 }
 
-const auctionBid = async(req, res)=>{
+const auctionBid = async (req, res) => {
     const id = req.params.id
     const amount = req.body.amount
-    const status = await userService.auctionBid(id,req.idUser,amount);
-    if(!status){
+    const status = await userService.auctionBid(id, req.idUser, amount);
+    if (!status) {
         return res
-        .status(200)
-        .json(
-            response(responseStatus.fail, transValidation.bad_request)
-        );
+            .status(200)
+            .json(
+                response(responseStatus.fail, transValidation.bad_request)
+            );
     }
     return res
         .status(200)
@@ -106,14 +106,14 @@ const auctionBid = async(req, res)=>{
         );
 }
 
-const viewCart = async(req, res)=>{
+const viewCart = async (req, res) => {
     const status = await userService.viewCart(req.idUser);
-    if(!status){
+    if (!status) {
         return res
-        .status(200)
-        .json(
-            response(responseStatus.fail, transValidation.bad_request)
-        );
+            .status(200)
+            .json(
+                response(responseStatus.fail, transValidation.bad_request)
+            );
     }
     return res
         .status(200)
@@ -122,39 +122,9 @@ const viewCart = async(req, res)=>{
         );
 }
 
-const listingAuction = async(req, res)=>{
-    const product = {
-        name : req.body.name,
-        quantity : req.body.quantity,
-        price : req.body.price,
-        category : req.body.category,
-        time_remain : req.body.time_remain,
-        description : req.body.description,
-        image : req.body.image
-    }
-    const status = userService.listingAuction(product);
-    return res
-        .status(200)
-        .json(
-            response(responseStatus.success, transValidation.input_correct, status)
-        );
-}
-
-const eventBidEnd = async(req, res)=>{
-    const bid_id = req.params.id
-
-    await userService.eventBidEnd(bid_id);
-    
-    return res
-        .status(200)
-        .json(
-            response(responseStatus.success, transValidation.input_correct)
-        );
-}
-
-const getUploadURL = async (req, res) => {
-    const file = req.params
-    if (!file.filename) {
+const listingAuction = async (req, res) => {
+    const files = req.files;
+    if (!files || files.length === 0) {
         return res
             .status(500)
             .json(
@@ -165,7 +135,51 @@ const getUploadURL = async (req, res) => {
                 )
             );
     }
-    const uploadURL = await userService.getLinkImage(file.filename);
+    const product = {
+        name: req.body.name,
+        quantity: req.body.quantity,
+        price: req.body.price,
+        category: req.body.category,
+        time_remain: req.body.time_remain,
+        description: req.body.description,
+        image: files
+    }
+    const status = await userService.listingAuction(product);
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, status)
+        );
+}
+
+const eventBidEnd = async (req, res) => {
+    const bid_id = req.params.id
+
+    await userService.eventBidEnd(bid_id);
+
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct)
+        );
+}
+
+const getUploadURL = async (req, res) => {
+    const files = req.body;
+    if (!files || files.length === 0) {
+        return res
+            .status(500)
+            .json(
+                response(
+                    responseStatus.fail,
+                    transValidation.bad_request,
+                    errorCode.bad_request
+                )
+            );
+    }
+
+    const arrayImage = Array.isArray(files.key) ? files.key : [files.key];
+    const uploadURL = await userService.getLinkImage(arrayImage);
 
     return res
         .status(200)
@@ -179,7 +193,7 @@ const getUploadURL = async (req, res) => {
 };
 
 module.exports = {
-    getAllProduct, getProductByCategory,getProductById,auctionBid,
-    listingAuction,eventBidEnd,getProductBySearch,getAllCategory,getUploadURL,getAuctionByStatus
-    ,viewCart
+    getAllProduct, getProductByCategory, getProductById, auctionBid,
+    listingAuction, eventBidEnd, getProductBySearch, getAllCategory, getUploadURL, getAuctionByStatus
+    , viewCart
 }
