@@ -4,7 +4,7 @@ const auctionController = require('./auction.controller');
 const authenMiddleware = require('../Middlewares/authen.middleware');
 const uploadMiddleware = require('../Middlewares/image_upload.middleware');
 
-router.get("/images", auctionController.getUploadURL)
+router.post("/images", auctionController.getUploadURL)
 router.post('/listing',uploadMiddleware.array("images"),authenMiddleware.isAuth, auctionController.listingAuction)
 router.get('/', auctionController.getAllProduct)
 router.get('/categories', auctionController.getAllCategory)
