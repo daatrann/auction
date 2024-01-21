@@ -4,6 +4,9 @@ const bidSchema = mongoose.Schema({
     name: {
         type: String,
     },
+    owner: {
+        type: String,
+    },
     time_remain: {
         type: String,
     },

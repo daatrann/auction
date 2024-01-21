@@ -26,6 +26,23 @@ const runCronTxJob = (user_id) => {
     }
 };
 
+const eventBidEndJob = (time, bid_id) => {
+    console.log('running')
+    try {
+        new CronJob({
+            /* at every minute check status transaction to update db */
+            cronTime: time +" * * * * *",
+            async onTick() {
+                const status = await service.eventBidEnd(bid_id);
+            },
+            start: true,
+            timeZone: TIME_ZONE.VN_TZ,
+        }).start();
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 // const runCronMintNFTJob = () => {
 //     try {
 //         new CronJob({
@@ -77,7 +94,8 @@ const runCronTxJob = (user_id) => {
 // }
 
 module.exports = {
-    runCronTxJob
+    runCronTxJob,
+    eventBidEndJob
     //,runCronMintNFTJob,
     //   ,runCronListingNFTJob,
     //   runResetDataLeaderBoard

@@ -3,7 +3,8 @@ const Cart = require('./models/cart.model')
 const User = require('../user_components/models/user.model')
 const jwt = require('jsonwebtoken')
 const aws = require("aws-sdk");
-const { runCronTxJob } = require('../cronJob');
+const { runCronTxJob, eventBidEndJob } = require('../cronJob');
+const { CronJob } = require('cron');
 require("dotenv").config;
 
 aws.config.update({
@@ -18,12 +19,12 @@ const getLinkImage = async (files) => {
 
 function getPresignedUrl(key) {
     const params = {
-      Bucket: process.env.BUCKET_NAME,
-      Key: key,
+        Bucket: process.env.BUCKET_NAME,
+        Key: key,
     };
-  
+
     return s3.getSignedUrl('getObject', params);
-  }
+}
 
 
 const getAllProduct = async () => {
@@ -59,15 +60,15 @@ const getProductById = async (id) => {
 }
 
 const viewCart = async (id) => {
-    const data = await Cart.find({ user_id : id })
+    const data = await Cart.find({ user_id: id })
     let cartData = []
     for (let i = 0; i < data.length; i++) {
         const bidData = await Auction.findOne({ _id: data[i].bid_id });
         cartData.push({
             cart: data[i],
-            productInfor : bidData
+            productInfor: bidData
         })
-        
+
     }
     return cartData
 }
@@ -78,6 +79,10 @@ const auctionBid = async (id, idUser, amount) => {
 
         if (!data) {
             return;
+        }
+
+        if(data.owner === idUser){
+            return
         }
 
         const topOwnerships = data.top_ownerships;
@@ -99,7 +104,7 @@ const auctionBid = async (id, idUser, amount) => {
                         },
                     }
                 );
-                console.log('Updated existing ownership data.');
+                return 'Updated existing ownership data.'
                 flag = true;
                 break;
             }
@@ -114,19 +119,19 @@ const auctionBid = async (id, idUser, amount) => {
                     },
                 }
             );
-            console.log('Added new ownership data.');
+            return 'Added new ownership data.'
         }
     } catch (error) {
-        return error
+        console.log(error);
     }
 
 }
 
-const listingAuction = async (product) => {
+const listingAuction = async (product,user_id) => {
     try {
         const keyImages = []
-        const uploadPromises = product.image.map( async (file) => {
-            const key = `${file.originalname}_${Date.now()}_${Math.random()}` 
+        const uploadPromises = product.image.map(async (file) => {
+            const key = `${file.originalname}_${Date.now()}_${Math.random()}`
             const params = {
                 Bucket: process.env.BUCKET_NAME,
                 Key: key,
@@ -140,6 +145,7 @@ const listingAuction = async (product) => {
         const imageUrls = await Promise.all(uploadPromises);
         const auction = new Auction({
             name: product.name,
+            owner : user_id,
             quantity: product.quantity,
             price: product.price,
             category: product.category,
@@ -148,11 +154,23 @@ const listingAuction = async (product) => {
             image: keyImages,
             status: "init"
         })
-        await auction.save(auction)
+        const auctionData = await auction.save(auction)
+        //use cron job to catch ending time then call event bid end
+        countBidEnd(product.time_remain, auctionData._id)
     } catch (error) {
-
+        console.log(error);
     }
 }
+
+const countBidEnd = (time,bid_id) => {
+    try {
+        setTimeout(() => {
+            eventBidEnd(bid_id);
+        }, time * 60 * 1000);
+    } catch (error) {
+    }
+}
+
 
 const eventBidEnd = async (id) => {
     const currentTime = new Date();
@@ -195,10 +213,26 @@ const eventCheckout = async (user_id) => {
     }
 };
 
+const sendWinerMail = async (id) => {
+    const currentTime = new Date();
+    try {
+        const bid = await getProductById(id)
+        const cart = new Cart({
+            bid_id: bid._id,
+            user_id: bid.top_ownerships[0].user_id,
+            status: "unpaid",
+            created_at: currentTime + ""
+        })
+        await cart.save(cart)
+        runCronTxJob(bid.top_ownerships[0].user_id)
+    } catch (error) {
+    }
+}
+
 
 
 module.exports = {
     getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction,
     eventBidEnd, getProductBySearch, getAllCategory, eventCheckout, getLinkImage,
-    getProductByStatus,viewCart
+    getProductByStatus, viewCart
 }

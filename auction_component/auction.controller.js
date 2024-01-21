@@ -92,6 +92,7 @@ const auctionBid = async (req, res) => {
     const id = req.params.id
     const amount = req.body.amount
     const status = await userService.auctionBid(id, req.idUser, amount);
+    console.log(status);
     if (!status) {
         return res
             .status(200)
@@ -144,7 +145,7 @@ const listingAuction = async (req, res) => {
         description: req.body.description,
         image: files
     }
-    const status = await userService.listingAuction(product);
+    const status = await userService.listingAuction(product,req.idUser);
     return res
         .status(200)
         .json(
