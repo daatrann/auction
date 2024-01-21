@@ -2,13 +2,7 @@ const express = require('express')
 const bodyParser = require("body-parser")
 const app = express()
 const cors = require('cors');
-const corsOptions ={
-    origin:'https://bidviet-com.vercel.app', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
-app.use(cors(corsOptions));
-app.use(cors(corsOptions));
+app.use(cors());
 require("dotenv").config()
 require("./util/mongoose.js")
 const userRoute = require('./user_components/user.route.js')
