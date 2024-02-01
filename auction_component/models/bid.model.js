@@ -32,6 +32,9 @@ const bidSchema = mongoose.Schema({
             user_id: {
                 type: String,
             },
+            user_name:{
+                type: Number,
+            },
             amount: {
                 type: Number,
             },

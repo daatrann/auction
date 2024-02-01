@@ -29,7 +29,7 @@ function getPresignedUrl(key) {
 
 
 const getAllProduct = async () => {
-    const auction = await Auction.find({status:"happenning"})
+    const auction = await Auction.find({status : "happenning"})
     return auction
 }
 
@@ -85,8 +85,10 @@ const auctionBid = async (id, idUser, amount) => {
         }
 
         const topOwnerships = data.top_ownerships;
+        const userE = await User.findOne({_id:idUser})
         const OwnershipData = {
             user_id: idUser,
+            user_name: userE.user_name,
             amount: amount,
         };
 
@@ -99,6 +101,7 @@ const auctionBid = async (id, idUser, amount) => {
                     {
                         $set: {
                             [`top_ownerships.${i}.user_id`]: OwnershipData.user_id,
+                            [`top_ownerships.${i}.user_name`]: OwnershipData.user_name,
                             [`top_ownerships.${i}.amount`]: OwnershipData.amount,
                         },
                     }

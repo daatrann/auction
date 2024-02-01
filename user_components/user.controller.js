@@ -93,7 +93,7 @@ const changePassword = async (req, res) => {
     const status = await userService.changePassword(req.idUser,oldPassword, newPassword);
     if(!status){
         return res
-        .status(200)
+        .status(400)
         .json(
             response(responseStatus.fail, transValidation.bad_request)
         );
