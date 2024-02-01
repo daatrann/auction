@@ -95,7 +95,7 @@ const changePassword = async (req, res) => {
         return res
         .status(200)
         .json(
-            response(responseStatus.fail, transValidation.email_exist)
+            response(responseStatus.fail, transValidation.bad_request)
         );
     }
     return res

@@ -75,6 +75,7 @@ const changePassword = async (id, oldPassword, newPassword) => {
             }, {
                 password: newPassword
             })
+            return "ok"
         }
     } catch (error) {
         console.log(error);
