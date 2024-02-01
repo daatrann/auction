@@ -1,10 +1,11 @@
 const Auction = require('./models/bid.model')
 const Cart = require('./models/cart.model')
+const Category = require('./models/category.model')
 const User = require('../user_components/models/user.model')
 const jwt = require('jsonwebtoken')
-const aws = require("aws-sdk");
-const { runCronTxJob, eventBidEndJob } = require('../cronJob');
-const { CronJob } = require('cron');
+const aws = require("aws-sdk")
+const { runCronTxJob, eventBidEndJob } = require('../cronJob')
+const mailer = require('nodemailer')
 require("dotenv").config;
 
 aws.config.update({
@@ -28,15 +29,13 @@ function getPresignedUrl(key) {
 
 
 const getAllProduct = async () => {
-    const auction = await Auction.find()
+    const auction = await Auction.find({status:"happenning"})
     return auction
 }
 
 const getAllCategory = async () => {
-    const data = await Auction.find()
-    const uniqueCategories = new Set(data.map(item => item.category));
-    const listCategory = [...uniqueCategories];
-    return listCategory
+    const data = await Category.find()
+    return data
 }
 
 const getProductBySearch = async (search) => {
@@ -60,7 +59,7 @@ const getProductById = async (id) => {
 }
 
 const viewCart = async (id) => {
-    const data = await Cart.find({ user_id: id })
+    const data = await Cart.find({ user_id: id,status : "unpaid" })
     let cartData = []
     for (let i = 0; i < data.length; i++) {
         const bidData = await Auction.findOne({ _id: data[i].bid_id });
@@ -81,7 +80,7 @@ const auctionBid = async (id, idUser, amount) => {
             return;
         }
 
-        if(data.owner === idUser){
+        if (data.owner === idUser) {
             return
         }
 
@@ -127,7 +126,7 @@ const auctionBid = async (id, idUser, amount) => {
 
 }
 
-const listingAuction = async (product,user_id) => {
+const listingAuction = async (product, user_id) => {
     try {
         const keyImages = []
         const uploadPromises = product.image.map(async (file) => {
@@ -145,14 +144,14 @@ const listingAuction = async (product,user_id) => {
         const imageUrls = await Promise.all(uploadPromises);
         const auction = new Auction({
             name: product.name,
-            owner : user_id,
+            owner: user_id,
             quantity: product.quantity,
             price: product.price,
             category: product.category,
             time_remain: product.time_remain,
             description: product.description,
             image: keyImages,
-            status: "init"
+            status: "happenning"
         })
         const auctionData = await auction.save(auction)
         //use cron job to catch ending time then call event bid end
@@ -162,11 +161,11 @@ const listingAuction = async (product,user_id) => {
     }
 }
 
-const countBidEnd = (time,bid_id) => {
+const countBidEnd = (time, bid_id) => {
     try {
         setTimeout(() => {
             eventBidEnd(bid_id);
-        }, time * 60 * 1000);
+        }, time* 24 * 60 * 1000);
     } catch (error) {
     }
 }
@@ -176,6 +175,11 @@ const eventBidEnd = async (id) => {
     const currentTime = new Date();
     try {
         const bid = await getProductById(id)
+        await Auction.updateOne({
+            _id : id
+        },{
+            status: "end"
+        })
         const cart = new Cart({
             bid_id: bid._id,
             user_id: bid.top_ownerships[0].user_id,
@@ -229,10 +233,37 @@ const sendWinerMail = async (id) => {
     }
 }
 
+const sendMail = async (email_to) => {
+    try {
+        const transporter = mailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.MAIL_FROM,
+                pass: process.env.MAIL_PASSWORD
+            }
+        });
+        const mailOptions = {
+            from: process.env.MAIL_FROM,
+            to: email_to,
+            subject: 'Hello from Node.js',
+            text: 'This is a test email sent from Node.js using nodemailer.'
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending email:', error);
+            } else {
+                console.log('Email sent:', info.response);
+            }
+        });
+
+    } catch (error) {
+    }
+}
+
 
 
 module.exports = {
     getAllProduct, getProductByCategory, getProductById, auctionBid, listingAuction,
     eventBidEnd, getProductBySearch, getAllCategory, eventCheckout, getLinkImage,
-    getProductByStatus, viewCart
+    getProductByStatus, viewCart,sendMail
 }

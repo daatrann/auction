@@ -66,15 +66,31 @@ const viewProfile = async (req, res) => {
 }
 
 const userUpdate = async (req, res) => {
-    const id = req.params.id
-    const userName = req.body.userName
-    const password = req.body.password
     const full_name = req.body.fullName
     const email = req.body.email
     const identity = req.body.identity
     const phone = req.body.phone
 
-    const status = await userService.userUpdate(id,userName, password, full_name, email, identity, phone);
+    const status = await userService.userUpdate(req.idUser, full_name, email, identity, phone);
+    if(!status){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.email_exist)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, status)
+        );
+}
+
+const changePassword = async (req, res) => {
+    const oldPassword = req.body.old_password
+    const newPassword = req.body.new_password
+
+    const status = await userService.changePassword(req.idUser,oldPassword, newPassword);
     if(!status){
         return res
         .status(200)
@@ -149,6 +165,73 @@ const supporter = async (req, res) => {
         );
 }
 
+const wishlist = async (req, res) => {
+    const data = await userService.wishlist(req.idUser);
+    if(!data){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.email_exist)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
+const addWishlist = async (req, res) => {
+    const auction_id = req.body.auction_id
+    const data = await userService.addWishlist(req.idUser,auction_id);
+    if(!data){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.email_exist)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
+const removeWishlist = async (req, res) => {
+    const wishlist_id = req.params.wishlist_id
+    const data = await userService.removeWishlist(req.idUser,wishlist_id);
+    if(!data){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.email_exist)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
+const removeAllWishlist = async (req, res) => {
+    const data = await userService.removeAllWishlist(req.idUser);
+    if(!data){
+        return res
+        .status(200)
+        .json(
+            response(responseStatus.fail, transValidation.email_exist)
+        );
+    }
+    return res
+        .status(200)
+        .json(
+            response(responseStatus.success, transValidation.input_correct, data)
+        );
+}
+
 module.exports = {
-    loginUser, register,userUpdate,viewProfile,userList,support,supporter
+    loginUser, register,userUpdate,viewProfile,userList,support,supporter,wishlist,changePassword,addWishlist,
+    removeWishlist,removeAllWishlist
 }

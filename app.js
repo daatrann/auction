@@ -13,7 +13,6 @@ app.use(
         extended: true,
     })
 );
-
 app.use('/user', userRoute)
 app.use('/auction', bidRoute)
 
