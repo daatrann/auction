@@ -69,7 +69,7 @@ const userUpdate = async (id, userName, full_name, email, identity, phone) => {
 const changePassword = async (id, oldPassword, newPassword) => {
     try {
         const userE = await User.findOne({ _id: id, password: oldPassword });
-        if (userE === null) {
+        if (userE !== null) {
             await User.updateOne({
                 _id: id
             }, {
